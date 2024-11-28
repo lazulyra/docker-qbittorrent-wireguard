@@ -6,7 +6,7 @@ fi
 # Set the correct rights accordingly to the PUID and PGID on /config/qBittorrent
 chown -R ${PUID}:${PGID} /config/qBittorrent
 
-##Disabling this because the downloads folder is my whole NAS and file ownerships are already managed by ACL.
+# Disabling this because the downloads folder is my whole NAS and file ownerships are already managed by ACL.
 # Set the rights on the /downloads folder
 #find /downloads -not -user ${PUID} -execdir chown ${PUID}:${PGID} {} \+
 
@@ -16,6 +16,11 @@ if [ ! -e /config/qBittorrent/config/qBittorrent.conf ]; then
 	cp /etc/qbittorrent/qBittorrent.conf /config/qBittorrent/config/qBittorrent.conf
 	chmod 755 /config/qBittorrent/config/qBittorrent.conf
 	chown ${PUID}:${PGID} /config/qBittorrent/config/qBittorrent.conf
+fi
+
+export INSTALL_PYTHON3=$(echo "${INSTALL_PYTHON3,,}")
+if [[ $INSTALL_PYTHON3 == "1" || $INSTALL_PYTHON3 == "true" || $INSTALL_PYTHON3 == "yes" ]]; then
+	/bin/bash /etc/qbittorrent/install-python3.sh
 fi
 
 # The mess down here checks if SSL is enabled.
